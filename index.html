@@ -104,26 +104,18 @@
           /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
           /* PUT ANY CHANGES TO THE JAVASCRIPT HERE  */
-  const canvas = document.getElementById("myCanvas");
-  const ctx = canvas.getContext("2d");
-  const img = document.getElementById("sourceImage");
+ canvas.addEventListener("click", function (event) {
+  const rect = canvas.getBoundingClientRect();
+  const x = Math.floor(event.clientX - rect.left);
+  const y = Math.floor(event.clientY - rect.top);
 
-  img.onload = function () {
-    ctx.drawImage(img, 0, 0); // Draw the image onto the canvas
-  };
+  const pixel = context.getImageData(x, y, 1, 1).data;
+  const [r, g, b, a] = pixel;
 
-  canvas.addEventListener("click", function (event) {
-    const rect = canvas.getBoundingClientRect();
-    const x = Math.floor(event.clientX - rect.left);
-    const y = Math.floor(event.clientY - rect.top);
-
-    const pixel = ctx.getImageData(x, y, 1, 1).data;
-    const [r, g, b, a] = pixel;
-
-    console.log(`Clicked at (${x}, ${y})`);
-    console.log(`RGB: (${r}, ${g}, ${b}), Alpha: ${a}`);
+  // Display RGB in the message area
+  messageDisplayArea.innerHTML = `RGB at (${x}, ${y}): R=${r}, G=${g}, B=${b}`;
+});
   });
-</script>
           } // end of img.onload and added code for this portion.
         
         img.src = reader.result;
