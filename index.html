@@ -104,21 +104,26 @@
           /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
           /* PUT ANY CHANGES TO THE JAVASCRIPT HERE  */
-          // Copies the image on to the second canvas.
-          context2.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, 0, 0, 600, 500);
-          // Retrives the image data from the second canvas, is what allows for editing of the images' pixels.
-          var imageData = context2.getImageData(0, 0, 600, 500);
-          var data = imageData.data;
-          // Loop removes red and green coloring and keeps blue coloring.
-          for (var i = 0; i < data.length; i += 4) {
-          data[i] = 0;     // Removes red coloring.
-          data[i + 1] = 0; // Removes green coloring.
-          }
+  const canvas = document.getElementById("myCanvas");
+  const ctx = canvas.getContext("2d");
+  const img = document.getElementById("sourceImage");
 
-          // Replaces the second canvas with the blue image.
-          context2.putImageData(imageData, 0, 0);
-          // Logs "Blue image processed." on the console when the blue image shows on the second canvas.
-          console.log("Blue image processed.");
+  img.onload = function () {
+    ctx.drawImage(img, 0, 0); // Draw the image onto the canvas
+  };
+
+  canvas.addEventListener("click", function (event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = Math.floor(event.clientX - rect.left);
+    const y = Math.floor(event.clientY - rect.top);
+
+    const pixel = ctx.getImageData(x, y, 1, 1).data;
+    const [r, g, b, a] = pixel;
+
+    console.log(`Clicked at (${x}, ${y})`);
+    console.log(`RGB: (${r}, ${g}, ${b}), Alpha: ${a}`);
+  });
+</script>
           } // end of img.onload and added code for this portion.
         
         img.src = reader.result;
